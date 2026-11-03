@@ -385,15 +385,15 @@ dialog::backdrop{background:rgba(46,11,20,.45);-webkit-backdrop-filter:blur(4px)
   <h2 id="pol-titulo">Política de privacidade</h2>
   <p>Como a Legado em Ordem trata os seus dados.</p>
   <h3>Responsável</h3><p>Legado em Ordem, CNPJ 48.747.993/0001-96, Paranaguá-PR.</p>
-  <h3>Dados tratados</h3><p>As informações e os documentos que você nos envia ao entrar em contato pelo WhatsApp e, se você aceitar os cookies, dados de navegação coletados pela ferramenta de medição de anúncios do Google.</p>
+  <h3>Dados tratados</h3><p>As informações e os documentos que você nos envia ao entrar em contato pelo WhatsApp e dados de navegação coletados pela ferramenta de medição de anúncios do Google: com cookies, se você aceitá-los; sem cookies e sem identificar você, se você recusar ou não responder ao aviso (por exemplo, a página visitada e o clique no botão do WhatsApp).</p>
   <h3>Finalidade</h3><p>Responder ao seu contato, prestar o serviço contratado e medir o desempenho dos anúncios.</p>
-  <h3>Base legal</h3><p>Procedimentos preliminares e execução de contrato (Lei 13.709/2018 (LGPD), art. 7º, V), para o atendimento e o serviço; consentimento (art. 7º, I), para os cookies de medição, que você pode recusar no aviso exibido no site.</p>
-  <h3>Compartilhamento</h3><p>Os dados não são vendidos nem cedidos para fins comerciais. Quando necessário ao serviço, são compartilhados com a Receita Estadual, o cartório e o registro de imóveis. A ferramenta de medição (Google) trata dados de navegação de quem aceita os cookies.</p>
+  <h3>Base legal</h3><p>Procedimentos preliminares e execução de contrato (Lei 13.709/2018 (LGPD), art. 7º, V), para o atendimento e o serviço; consentimento (art. 7º, I), para os cookies de medição, que você pode recusar no aviso exibido no site; legítimo interesse (art. 7º, IX), para a medição sem cookies dos anúncios.</p>
+  <h3>Compartilhamento</h3><p>Os dados não são vendidos nem cedidos para fins comerciais. Quando necessário ao serviço, são compartilhados com a Receita Estadual, o cartório e o registro de imóveis. A ferramenta de medição (Google) trata dados de navegação: com cookies, de quem os aceita; sem cookies, dos demais visitantes.</p>
   <h3>Prazo</h3><p>Os dados são mantidos pelo tempo necessário à finalidade ou ao cumprimento de obrigações legais.</p>
   <h3>Direitos do titular</h3>
   <ul><li>Confirmar se há tratamento e acessar os dados</li><li>Corrigir dados incompletos ou desatualizados</li><li>Pedir a exclusão dos dados, ressalvado o que a lei obriga a guardar</li><li>Revogar o consentimento dado aos cookies</li></ul>
   <p>Pedidos pelo WhatsApp <a href="https://wa.me/5541991531196" target="_blank" rel="noopener">(41) 9 9153-1196</a>.</p>
-  <p>Atualizada em 30/10/2026.</p>
+  <p>Atualizada em 03/11/2026.</p>
   <form method="dialog"><button class="btn sec">Fechar</button></form>
 </div></dialog>
 
@@ -434,34 +434,34 @@ dialog::backdrop{background:rgba(46,11,20,.45);-webkit-backdrop-filter:blur(4px)
 <script>
 /* Google Ads: preencher os dois valores abaixo com os códigos gerados na conta do Google Ads.
    Enquanto ADS_ID estiver vazio, nada é carregado e o aviso de cookies não aparece.
-   A tag do Google só é carregada depois que o visitante clica em "Aceitar". */
+   Modo de consentimento: a tag carrega sempre, mas sem cookies até o visitante clicar em "Aceitar".
+   Sem aceite, o Google recebe só sinais sem cookies e estima as conversões desses visitantes. */
 (function(){
   var ADS_ID = 'AW-18546807906';         // ex.: 'AW-123456789'
   var ADS_LABEL = 'EJd6CJfOoq8dEOKo54tF'; // rótulo da conversão "Clique WhatsApp", ex.: 'AbCdEfGhIjK'
   if(!ADS_ID) return;
   var CHAVE='lo-cookies', aviso=document.getElementById('cookies');
+  var NEGADO={ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied'};
+  var LIBERADO={ad_storage:'granted',ad_user_data:'granted',ad_personalization:'granted',analytics_storage:'granted'};
   function ler(){try{return localStorage.getItem(CHAVE);}catch(e){return null;}}
   function gravar(v){try{localStorage.setItem(CHAVE,v);}catch(e){}}
-  function carregarTag(){
-    if(window.gtag) return;
-    window.dataLayer=window.dataLayer||[];
-    window.gtag=function(){dataLayer.push(arguments);};
-    gtag('js',new Date());gtag('config',ADS_ID);
-    var sc=document.createElement('script');sc.async=true;
-    sc.src='https://www.googletagmanager.com/gtag/js?id='+encodeURIComponent(ADS_ID);
-    document.head.appendChild(sc);
-  }
+  var escolha=ler();
+  window.dataLayer=window.dataLayer||[];
+  window.gtag=function(){dataLayer.push(arguments);};
+  gtag('consent','default',escolha==='aceito'?LIBERADO:NEGADO);
+  gtag('js',new Date());gtag('config',ADS_ID);
+  var sc=document.createElement('script');sc.async=true;
+  sc.src='https://www.googletagmanager.com/gtag/js?id='+encodeURIComponent(ADS_ID);
+  document.head.appendChild(sc);
   document.addEventListener('click',function(e){
     var a=e.target.closest('a[href^="https://wa.me"]');
-    if(a&&window.gtag&&ADS_LABEL){gtag('event','conversion',{'send_to':ADS_ID+'/'+ADS_LABEL});}
+    if(a&&ADS_LABEL){gtag('event','conversion',{'send_to':ADS_ID+'/'+ADS_LABEL,'transport_type':'beacon'});}
   });
-  var escolha=ler();
-  if(escolha==='aceito'){carregarTag();}
-  else if(escolha!=='recusado'){aviso.hidden=false;}
+  if(escolha!=='aceito'&&escolha!=='recusado'){aviso.hidden=false;}
   aviso.querySelectorAll('[data-cookies]').forEach(function(b){
     b.addEventListener('click',function(){
       var v=b.getAttribute('data-cookies');gravar(v);aviso.hidden=true;
-      if(v==='aceito'){carregarTag();}
+      gtag('consent','update',v==='aceito'?LIBERADO:NEGADO);
     });
   });
 })();
