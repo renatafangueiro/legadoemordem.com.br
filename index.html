@@ -244,6 +244,21 @@ dialog::backdrop{background:rgba(46,11,20,.45);-webkit-backdrop-filter:blur(4px)
 .cookies .linkbtn{color:var(--marsala);font-size:13px}
 @media(max-width:899px){.cookies{left:12px;right:12px;bottom:calc(84px + env(safe-area-inset-bottom,0px));padding:12px 14px;border-radius:14px;font-size:13px;line-height:1.4}.cookies .acoes-c{margin-top:8px;gap:8px}.cookies .btn{min-height:34px;padding:0 14px;font-size:12.5px}.cookies .linkbtn{font-size:12px}}
 section[hidden]{display:none}
+/* depoimentos (04/11/2026) */
+.depo{max-width:760px;margin:0 auto;text-align:center}
+.depo .h2{margin-bottom:clamp(28px,4vw,40px)}
+.depo-trilho{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;border-radius:var(--r-card);list-style:none}
+.depo-trilho::-webkit-scrollbar{display:none}
+.depo-trilho li{flex:0 0 100%;scroll-snap-align:center;padding:clamp(28px,4vw,44px) clamp(22px,4vw,48px);background:linear-gradient(180deg,var(--wash2),var(--wash));box-shadow:inset 0 0 0 1px var(--line);border-radius:var(--r-card)}
+.depo-trilho li+li{margin-left:14px}
+.depo blockquote p{font:italic 600 clamp(21px,2.6vw,28px)/1.4 var(--f-tit);color:var(--marsala);text-wrap:balance}
+.depo blockquote p::before{content:"“";display:block;font-size:56px;line-height:.6;color:var(--gold);margin-bottom:10px}
+.depo mark{background:linear-gradient(transparent 62%,rgba(214,173,126,.45) 62%);color:inherit;padding:0 2px}
+.depo figcaption{margin-top:18px;font-size:14px;color:var(--soft)}
+.depo-pontos{display:flex;justify-content:center;gap:10px;margin-top:18px}
+.depo-pontos button{width:10px;height:10px;padding:0;border:0;border-radius:50%;background:rgba(87,23,37,.18);cursor:pointer;transition:background .3s,transform .3s}
+.depo-pontos button[aria-current="true"]{background:var(--gold);transform:scale(1.2)}
+.depo .micro{margin-top:16px}
 </style>
 </head>
 <body>
@@ -346,6 +361,17 @@ section[hidden]{display:none}
   </ul>
 </div></section>
 
+<section class="sec" id="depoimentos" style="padding-top:0"><div class="wrap"><div class="depo rv">
+  <p class="kicker">Depoimentos</p>
+  <h2 class="h2">O que dizem os clientes</h2>
+  <ul class="depo-trilho" id="depo-trilho" aria-label="Depoimentos de clientes">
+    <li><figure><blockquote><p>Você é <mark>a melhor</mark>! Muito obrigado pelos teus serviços.</p></blockquote><figcaption>Cliente, advogado · contratou a assessoria para uma escritura de compra e venda</figcaption></figure></li>
+    <li><figure><blockquote><p>Parabéns… você é <mark>super diligente e competente</mark>. Vou precisar agendar uma outra missão.</p></blockquote><figcaption>Cliente · fez uma permuta</figcaption></figure></li>
+  </ul>
+  <div class="depo-pontos" id="depo-pontos"></div>
+  <p class="micro">Mensagens reais recebidas pelo WhatsApp. Os nomes foram omitidos para preservar a privacidade dos clientes.</p>
+</div></div></section>
+
 <section class="sec" id="perguntas" style="padding-top:0"><div class="wrap faq-grid">
   <div class="rv"><p class="kicker">Dúvidas frequentes</p><h2 class="h2">O que costumam nos perguntar</h2></div>
   <div class="perguntas rv">
@@ -430,6 +456,20 @@ section[hidden]{display:none}
   document.querySelectorAll('[data-politica]').forEach(function(b){b.addEventListener('click',function(){if(dlg.showModal){dlg.showModal();}else{dlg.setAttribute('open','');}});});
 
   document.querySelectorAll('[data-whatsapp],[data-checkout]').forEach(function(a){if(a.getAttribute('href')==='#'){a.addEventListener('click',function(e){e.preventDefault();});}});
+
+  /* depoimentos: passam sozinhos a cada 6 s; param com o mouse em cima, com o foco ou se o visitante preferir menos movimento */
+  var trilho=document.getElementById('depo-trilho'),pontos=document.getElementById('depo-pontos');
+  if(trilho&&pontos){
+    var itens=trilho.children,atual=0,pausa=false,calmo=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function ir(i){atual=(i+itens.length)%itens.length;trilho.scrollTo({left:itens[atual].offsetLeft-trilho.offsetLeft,behavior:calmo?'auto':'smooth'});marcar();}
+    function marcar(){[].forEach.call(pontos.children,function(b,i){b.setAttribute('aria-current',i===atual?'true':'false');});}
+    [].forEach.call(itens,function(_,i){var b=document.createElement('button');b.type='button';b.setAttribute('aria-label','Depoimento '+(i+1));b.addEventListener('click',function(){ir(i);});pontos.appendChild(b);});
+    marcar();
+    trilho.addEventListener('scroll',function(){var i=Math.round(trilho.scrollLeft/trilho.clientWidth);if(i!==atual&&itens[i]){atual=i;marcar();}},{passive:true});
+    ['mouseenter','focusin','touchstart'].forEach(function(t){trilho.addEventListener(t,function(){pausa=true;},{passive:true});});
+    ['mouseleave','focusout'].forEach(function(t){trilho.addEventListener(t,function(){pausa=false;});});
+    if(!calmo&&itens.length>1){setInterval(function(){if(!pausa&&!document.hidden){ir(atual+1);}},6000);}
+  }
 })();
 </script>
 <script>
