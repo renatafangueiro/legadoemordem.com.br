@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://legadoemordem.com.br/sitemap.xml
